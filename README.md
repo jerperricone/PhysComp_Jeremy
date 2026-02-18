@@ -1,2 +1,8 @@
-# PhysComp_Jeremy
-For Physical Computing Class 
+# PhysComp\_Jeremy
+
+For Physical Computing Class
+
+
+
+spring 2026
+
