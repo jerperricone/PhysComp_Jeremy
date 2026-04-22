@@ -43,8 +43,7 @@ function draw()
 
   //indicator line
   stroke(0, 200, 0);
-  let lineX = pot; //line x cordinate = pot value
-  map(lineX, 100, 700, 0, 150); //map horozontal line distance from 0-150
+  let lineX = map(pot, 0, 150, 100, 700); //lineX = remapped pot value 
   line(lineX, 375, lineX, 525); //x coordinate = pot
 
   textSize(50);
@@ -54,7 +53,7 @@ function draw()
   if(pot == number) //make button appear when pot value = random number 
   {
     fill(255, 255, 0);
-    rect(600, 700, 100, 200);
+    rect(600, 100, 100, 100);
 
     fill(0);
     textSize(50);
@@ -67,26 +66,27 @@ function draw()
 
 function mousePressed() //if mouse is pressed...
 {
-  if (numberMatch = true && mouseX > 600 && mouseX < 700 && mouseY > 100 && mouseY < 200) // if mouse postion is within button
+  if (numberMatch = true && mouseX > 600 && mouseX < 700 && mouseY > 100 && mouseY < 200) // if mouse presses within button
   {
-    rxFlag = true //make rxFlag true 
+   // rxFlag = true //make rxFlag true 
 
-    if (rxFlag = true) //if rxFlag is true, send data
-    {
+    //if (rxFlag = true) //if rxFlag is true, send data
+    //{
       serial.write('B'); // send 'B' to the serial port to tell arduino to blink LED 
       number = floor(random(0, 150)); //select another random number 
       rxFlag = false //toggle rxFlag back to false
-    }
+   }
     else  //if rxFlag is false, we want to recieve pot data
     {
       serial.write('A'); // send 'A' to the serial port to indicate that we want to recieve data from pot
     }
-  }
 }
+
 
 function portOpen() //gets called when the serial port opens
 {
   print("SERIAL PORT OPEN");
+  serial.write('A');
 }
 
 function portClose() //gets called when the serial port closes
@@ -106,7 +106,7 @@ function printList(portList) // gets called when the serial.list() function is c
 function serialEvent() // gets called when new serial data arrives
 {
   
-  if(rxFlag = false)  //if rxFlag is false, we want to receive data
+  //if(rxFlag = false)  //if rxFlag is false, we want to receive data
   {
     let inString = serial.readStringUntil('\n'); // read the incoming string until you get a newline character
     if (inString.length > 0) 
@@ -119,7 +119,7 @@ function serialEvent() // gets called when new serial data arrives
         print(sensors); // print the array of sensor values to the console
 
         pot = Number(sensors[0]); // convert the sensor value to an integer
-        pot = map(pot, 0, 1023, 0, 150); // map the potentiometer value from 0-1023 to 0-255
+        pot = map(pot, 0, 1023, 0, 150); // map the potentiometer value from 0-1023 to 0-150
         pot = floor(pot); // round the potentiometer value to an integer
 
         print(" Pot: " + pot);  //print mapped sensor values to the console
@@ -129,11 +129,11 @@ function serialEvent() // gets called when new serial data arrives
       }
     }
   }
-  else
-  {
-    let inString = serial.readStringUntil('\n'); // read the incoming string until you get a newline character
-    print(inString); // print the incoming string to the console
-  }
+  // else
+  // {
+  //   let inString = serial.readStringUntil('\n'); // read the incoming string until you get a newline character
+  //   print(inString); // print the incoming string to the console
+  // }
 }
 
 function serialError(err) //gets called when there's an error
